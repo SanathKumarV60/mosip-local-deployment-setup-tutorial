@@ -539,4 +539,24 @@
          </otherwise>
       </choice>
    </route>
+   <route id="sample-stage new route">
+      <from uri="eventbus://sample-stage-new-bus-out" />
+      <log message="sample-stage new route ${bodyAs(String)}" />
+      <choice>
+         <when>
+            <jsonpath>$.[?(@['isValid'] == false &amp;&amp; @['internalError'] == true)]</jsonpath>
+            <to uri="workflow-cmd://complete-as-failed" />
+            <to uri="workflow-cmd://anonymous-profile" />
+         </when>
+         <when>
+            
+            <jsonpath>$.[?(@['tags']['A1'] != '' &amp;&amp; @['tags']['A1'] == 'Value1')]</jsonpath>
+            <to uri="eventbus://sample-stage-value-1" />
+         </when>
+         <when>
+            <jsonpath>$.[?(@['tags']['AGE_GROUP'] != '' &amp;&amp; @['tags']['AGE_GROUP'] == 'ADULT')]</jsonpath>
+            <to uri="eventbus://sample-stage-adults" />
+         </when>
+      </choice>
+   </route>
 </routes>

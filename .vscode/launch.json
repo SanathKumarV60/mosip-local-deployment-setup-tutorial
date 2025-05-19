@@ -1,0 +1,210 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "App",
+            "request": "launch",
+            "mainClass": "io.mosip.App",
+            "projectName": "kafka-producer"
+        },
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "ConfigServerApplication",
+            "request": "launch",
+            "mainClass": "io.mosip.ConfigServer.ConfigServerApplication",
+            "projectName": "ConfigServer"
+        },
+        {
+            "type": "java",
+            "name": "MosipStageExecutorApplication",
+            "request": "launch",
+            "mainClass": "io.mosip.registration.processor.stages.executor.MosipStageExecutorApplication",
+            "projectName": "mosip-stage-executor"
+        },
+        {
+            "type": "java",
+            "name": "AbisHandlerApplication",
+            "request": "launch",
+            "mainClass": "io.mosip.registration.processor.abis.handler.AbisHandlerApplication",
+            "projectName": "registration-processor-abis-handler-stage"
+        },
+        {
+            "type": "java",
+            "name": "AbisMiddleWareApplication",
+            "request": "launch",
+            "mainClass": "io.mosip.registartion.processor.abis.middleware.AbisMiddleWareApplication",
+            "projectName": "registration-processor-abis-middleware-stage"
+        },
+        {
+            "type": "java",
+            "name": "RestAbisApplication",
+            "request": "launch",
+            "mainClass": "io.mosip.registration.processor.abis.RestAbisApplication",
+            "projectName": "registration-processor-abis"
+        },
+        {
+            "type": "java",
+            "name": "BioDedupeApplication",
+            "request": "launch",
+            "mainClass": "io.mosip.registration.processor.biodedupe.BioDedupeApplication",
+            "projectName": "registration-processor-bio-dedupe-stage"
+        },
+        {
+            "type": "java",
+            "name": "BiometricAuthenticationApplication",
+            "request": "launch",
+            "mainClass": "io.mosip.registration.processor.biometric.authentication.BiometricAuthenticationApplication",
+            "projectName": "registration-processor-biometric-authentication-stage"
+        },
+        {
+            "type": "java",
+            "name": "MosipCamelBridgeApplication",
+            "request": "launch",
+            "mainClass": "io.mosip.registration.processor.camel.bridge.MosipCamelBridgeApplication",
+            "projectName": "registration-processor-common-camel-bridge"
+        },
+        {
+            "type": "java",
+            "name": "CredentialRequestorStageApplication",
+            "request": "launch",
+            "mainClass": "io.mosip.registration.processor.credentialrequestor.CredentialRequestorStageApplication",
+            "projectName": "registration-processor-credential-requestor-stage"
+        },
+        {
+            "type": "java",
+            "name": "DemodedupeApplication",
+            "request": "launch",
+            "mainClass": "io.mosip.registration.processor.stages.app.DemodedupeApplication",
+            "projectName": "registration-processor-demo-dedupe-stage"
+        },
+        {
+            "type": "java",
+            "name": "PacketInfoManagerApplication",
+            "request": "launch",
+            "mainClass": "io.mosip.registration.processor.packet.storage.PacketInfoManagerApplication",
+            "projectName": "registration-processor-info-storage-service"
+        },
+        {
+            "type": "java",
+            "name": "BytesUtil",
+            "request": "launch",
+            "mainClass": "io.mosip.registration.processor.packet.storage.utils.BytesUtil",
+            "projectName": "registration-processor-info-storage-service"
+        },
+        {
+            "type": "java",
+            "name": "RegistrationProcessorLandingZoneApplication",
+            "request": "launch",
+            "mainClass": "io.mosip.registration.processor.RegistrationProcessorLandingZoneApplication",
+            "projectName": "registration-processor-landing-zone"
+        },
+        {
+            "type": "java",
+            "name": "ManualAdjudicationApplication",
+            "request": "launch",
+            "mainClass": "io.mosip.registration.processor.adjudication.ManualAdjudicationApplication",
+            "projectName": "registration-processor-manual-adjudication-stage"
+        },
+        {
+            "type": "java",
+            "name": "MessageSenderApplication",
+            "request": "launch",
+            "mainClass": "io.mosip.registration.processor.message.sender.MessageSenderApplication",
+            "projectName": "registration-processor-message-sender-stage"
+        },
+        {
+            "type": "java",
+            "name": "NotificationApplication",
+            "request": "launch",
+            "mainClass": "io.mosip.registration.processor.notification.NotificationApplication",
+            "projectName": "registration-processor-notification-service"
+        },
+        {
+            "type": "java",
+            "name": "PacketManagerBootApplication",
+            "request": "launch",
+            "mainClass": "io.mosip.registration.processor.packet.manager.PacketManagerBootApplication",
+            "projectName": "registration-processor-packet-manager"
+        },
+        {
+            "type": "java",
+            "name": "PacketReceiverApplication",
+            "request": "launch",
+            "mainClass": "io.mosip.registration.processor.packet.receiver.PacketReceiverApplication",
+            "projectName": "registration-processor-packet-receiver-stage"
+        },
+        {
+            "type": "java",
+            "name": "PacketUploaderJobApplication",
+            "request": "launch",
+            "mainClass": "io.mosip.registration.processor.packet.uploader.PacketUploaderJobApplication",
+            "projectName": "registration-processor-packet-uploader-stage"
+        },
+        {
+            "type": "java",
+            "name": "PacketValidatorApplication",
+            "request": "launch",
+            "mainClass": "io.mosip.registration.processor.stages.PacketValidatorApplication",
+            "projectName": "registration-processor-packet-validator-stage"
+        },
+        {
+            "type": "java",
+            "name": "QualityClassifierApplication",
+            "request": "launch",
+            "mainClass": "io.mosip.registration.processor.quality.classifier.QualityClassifierApplication",
+            "projectName": "registration-processor-quality-classifier-stage"
+        },
+        {
+            "type": "java",
+            "name": "RegistrationStatusApiApplication",
+            "request": "launch",
+            "mainClass": "io.mosip.registration.processor.status.api.RegistrationStatusApiApplication",
+            "projectName": "registration-processor-registration-status-service"
+        },
+        {
+            "type": "java",
+            "name": "RegistrationTransactionServiceApplication",
+            "request": "launch",
+            "mainClass": "io.mosip.registration.processor.transaction.api.RegistrationTransactionServiceApplication",
+            "projectName": "registration-processor-registration-transaction-service"
+        },
+        {
+            "type": "java",
+            "name": "ReprocessorApplication",
+            "request": "launch",
+            "mainClass": "io.mosip.registration.processor.reprocessor.ReprocessorApplication",
+            "projectName": "registration-processor-reprocessor"
+        },
+        {
+            "type": "java",
+            "name": "SecurezoneNotificationApplication",
+            "request": "launch",
+            "mainClass": "io.mosip.registration.processor.securezone.notification.SecurezoneNotificationApplication",
+            "projectName": "registration-processor-securezone-notification-stage"
+        },
+        {
+            "type": "java",
+            "name": "UinGeneratorApplication",
+            "request": "launch",
+            "mainClass": "io.mosip.registration.processor.stages.uingenerator.UinGeneratorApplication",
+            "projectName": "registration-processor-uin-generator-stage"
+        },
+        {
+            "type": "java",
+            "name": "WorkflowManagerApplication",
+            "request": "launch",
+            "mainClass": "io.mosip.registration.processor.workflowmanager.WorkflowManagerApplication",
+            "projectName": "registration-processor-workflow-manager-service"
+        }
+    ]
+}

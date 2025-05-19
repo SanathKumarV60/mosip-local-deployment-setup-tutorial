@@ -12,6 +12,7 @@ services:
       - ALLOW_ANONYMOUS_LOGIN=yes
   kafka:
     image: docker.io/bitnami/kafka:2.8.0-debian-10-r0
+    hostname: kafka
     ports:
       - "9092:9092"
       - "29092:29092"
@@ -39,10 +40,26 @@ services:
       - kafka
   config-server:
     build:
-      context: ../../config-server
+      context: ../config-server
       dockerfile: mosipconfig.dockerfile
+    hostname: config-server
     ports:
       - "51000:51000"
+#  camel-bridge-stage:
+#    build:
+#      context: regproc-stages
+#      dockerfile: mosipstage.dockerfile
+#    environment:
+#      - spring.cloud.config.uri=http://config-server:51000/config
+#      - mosip.regproc.eventbus.kafka.bootstrap.servers=kafka:9092
+#    depends_on:
+#      - config-server
+#      - kafka
+#    healthcheck:
+#        test: ["CMD", "curl", "-f", "http://config-server:51000/config/actuator/health"]
+#        interval: 30s
+#        timeout: 30s
+#        retries: 5
 volumes:
   zookeeper_data:
     driver: local
