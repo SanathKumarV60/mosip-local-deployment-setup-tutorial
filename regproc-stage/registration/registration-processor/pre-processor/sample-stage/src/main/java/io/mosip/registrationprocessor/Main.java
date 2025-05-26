@@ -1,14 +1,31 @@
 package io.mosip.registrationprocessor;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageInputStream;
+import javax.imageio.stream.ImageOutputStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.ComponentScan;
 
 import com.google.gson.Gson;
+
+import io.mosip.kernel.biometrics.constant.BiometricType;
+import io.mosip.kernel.biometrics.entities.BIR;
+import io.mosip.kernel.biometrics.entities.BiometricRecord;
 
 import io.mosip.kernel.core.logger.spi.Logger;
 import io.mosip.kernel.core.util.exception.JsonProcessingException;
@@ -27,6 +44,9 @@ import io.mosip.registration.processor.packet.storage.utils.PacketManagerService
 import io.mosip.registration.processor.status.dto.InternalRegistrationStatusDto;
 import io.mosip.registration.processor.status.dto.RegistrationStatusDto;
 import io.mosip.registration.processor.status.service.RegistrationStatusService;
+import io.mosip.biometrics.util.CommonUtil;
+import io.mosip.biometrics.util.ImageType;
+import io.mosip.biometrics.util.Modality;
 
 @ComponentScan(basePackages = { "${mosip.auth.adapter.impl.basepackage}",
 		"io.mosip.registration.processor.core.config",
@@ -58,8 +78,8 @@ public class Main extends MosipVerticleAPIManager{
 	@Autowired
 	RegistrationStatusService<String, InternalRegistrationStatusDto, RegistrationStatusDto> registrationStatusService;
 
-	//@Autowired
-	//private PriorityBasedPacketManagerService basedPacketManagerService;
+	@Autowired
+	private PriorityBasedPacketManagerService basedPacketManagerService;
 	
 	@Autowired
 	private PacketManagerService packetManagerService;
@@ -102,13 +122,41 @@ public class Main extends MosipVerticleAPIManager{
 				if(object.getTags() != null)
 					tags = object.getTags();
 
-				packetManagerService.addOrUpdateTags(regId, tags);
+//				packetManagerService.addOrUpdateTags(regId, tags);
 
-				Map<String,String> attributes = packetManagerService.getAllFieldsByMappingJsonKeys(regId, object.getReg_type(), ProviderStageName.BIO_DEDUPE);
-				attributes.forEach( (k,v)->{
-					regProcLogger.info("Key="+k+",Value="+v);
-				});
-				
+				//Map<String,String> attributes = packetManagerService.getAllFieldsByMappingJsonKeys(regId, object.getReg_type(), ProviderStageName.BIO_DEDUPE);
+				//attributes.forEach( (k,v)->{
+				//	regProcLogger.info("Key="+k+",Value="+v);
+				//});
+				BiometricRecord record = basedPacketManagerService.getBiometricsByMappingJsonKey(regId,
+				MappingJsonConstants.INDIVIDUAL_BIOMETRICS, registrationStatusDto.getRegistrationType(),
+				ProviderStageName.QUALITY_CHECKER);
+
+				//BiometricRecord record = packetManagerService.getBiometrics(regId, "user", object.getReg_type(), ProviderStageName.BIO_DEDUPE);
+				for(BIR bir: record.getSegments()){
+					BiometricType biometricType = bir.getBdbInfo().getType().get(0);
+					if(biometricType.name().equalsIgnoreCase(BiometricType.FACE.name())){
+						byte[] faceData = bir.getBdb();
+						
+						//save face data to a file
+						try (FileOutputStream fos = new FileOutputStream("face.raw")) {
+							fos.write(faceData);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						
+						String isoJpegFace = CommonUtil.convertISOImageType( new String(faceData),
+								 Modality.Face, ImageType.JPEG);
+						String base64Image = isoJpegFace.split(",")[1];
+						byte[] imageBytes = javax.xml.bind.DatatypeConverter.parseBase64Binary(base64Image);
+						BufferedImage img = ImageIO.read(new ByteArrayInputStream(imageBytes));
+
+						File file = new File("face-"+ ".jpg");
+						ImageIO.write(img, "jpg", file);
+																  
+					}
+					
+				}
 				
 			} catch (ApisResourceAccessException e) {
 				// TODO Auto-generated catch block
