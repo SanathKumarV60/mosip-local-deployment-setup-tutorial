@@ -45,8 +45,10 @@ import io.mosip.registration.processor.status.dto.InternalRegistrationStatusDto;
 import io.mosip.registration.processor.status.dto.RegistrationStatusDto;
 import io.mosip.registration.processor.status.service.RegistrationStatusService;
 import io.mosip.biometrics.util.CommonUtil;
+import io.mosip.biometrics.util.ConvertRequestDto;
 import io.mosip.biometrics.util.ImageType;
 import io.mosip.biometrics.util.Modality;
+import io.mosip.biometrics.util.face.FaceDecoder;
 
 @ComponentScan(basePackages = { "${mosip.auth.adapter.impl.basepackage}",
 		"io.mosip.registration.processor.core.config",
@@ -122,51 +124,26 @@ public class Main extends MosipVerticleAPIManager{
 				if(object.getTags() != null)
 					tags = object.getTags();
 
-//				packetManagerService.addOrUpdateTags(regId, tags);
+				packetManagerService.addOrUpdateTags(regId, tags);
 
-				//Map<String,String> attributes = packetManagerService.getAllFieldsByMappingJsonKeys(regId, object.getReg_type(), ProviderStageName.BIO_DEDUPE);
-				//attributes.forEach( (k,v)->{
-				//	regProcLogger.info("Key="+k+",Value="+v);
-				//});
+				Map<String,String> attributes = packetManagerService.getAllFieldsByMappingJsonKeys(regId, object.getReg_type(), ProviderStageName.BIO_DEDUPE);
+				attributes.forEach( (k,v)->{
+					regProcLogger.info("Key="+k+",Value="+v);
+				});
 				BiometricRecord record = basedPacketManagerService.getBiometricsByMappingJsonKey(regId,
 				MappingJsonConstants.INDIVIDUAL_BIOMETRICS, registrationStatusDto.getRegistrationType(),
 				ProviderStageName.QUALITY_CHECKER);
 
-				//BiometricRecord record = packetManagerService.getBiometrics(regId, "user", object.getReg_type(), ProviderStageName.BIO_DEDUPE);
 				for(BIR bir: record.getSegments()){
 					BiometricType biometricType = bir.getBdbInfo().getType().get(0);
 					if(biometricType.name().equalsIgnoreCase(BiometricType.FACE.name())){
 						byte[] faceData = bir.getBdb();
 						
-						//save face data to a file
-						try (FileOutputStream fos = new FileOutputStream("face.raw")) {
-							fos.write(faceData);
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-						
-						String isoJpegFace = CommonUtil.convertISOImageType( new String(faceData),
-								 Modality.Face, ImageType.JPEG);
-						String base64Image = isoJpegFace.split(",")[1];
-						byte[] imageBytes = javax.xml.bind.DatatypeConverter.parseBase64Binary(base64Image);
-						BufferedImage img = ImageIO.read(new ByteArrayInputStream(imageBytes));
-
-						File file = new File("face-"+ ".jpg");
-						ImageIO.write(img, "jpg", file);
-																  
+						convertFace(faceData,"face-"+ regId+".jpg");
 					}
 					
 				}
 				
-			} catch (ApisResourceAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (PacketManagerException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (JsonProcessingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -180,6 +157,32 @@ public class Main extends MosipVerticleAPIManager{
         return object;
     }
 
+	void convertFace(byte[] isoData , String fileName){
+		ConvertRequestDto requestDto = new ConvertRequestDto();
+		requestDto.setModality("Face");
+		requestDto.setPurpose("");
+		requestDto.setVersion("ISO19794_5_2011");
+
+		requestDto.setInputBytes(isoData);
+		requestDto.setOnlyImageInformation(1);
+
+		byte[] imageData;
+		try {
+			imageData = FaceDecoder.convertFaceISOToImageBytes(requestDto);
+		
+			if (imageData != null) {
+				// Write bytes to tmp file.
+				File tmpImageFile = new File(fileName);
+				FileOutputStream tmpOutputStream = new FileOutputStream(tmpImageFile);
+				tmpOutputStream.write(imageData);
+				tmpOutputStream.close();
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
     @Override
     protected String getPropertyPrefix() {
         return STAGE_PROPERTY_PREFIX;

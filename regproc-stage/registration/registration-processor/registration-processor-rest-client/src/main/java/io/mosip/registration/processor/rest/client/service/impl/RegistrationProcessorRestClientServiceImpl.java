@@ -203,7 +203,7 @@ public class RegistrationProcessorRestClientServiceImpl implements RegistrationP
 	@Override
 	public Object postApi(ApiName apiName, String queryParamName, String queryParamValue, Object requestedData,
 			Class<?> responseType) throws ApisResourceAccessException {
-		return postApi(apiName, queryParamName, queryParamValue, requestedData, responseType, null);
+		return postApi(apiName, queryParamName, queryParamValue, requestedData, responseType, MediaType.APPLICATION_JSON);
 	}
 
 	/*
@@ -245,7 +245,7 @@ public class RegistrationProcessorRestClientServiceImpl implements RegistrationP
 			}
 
 			try {
-				obj = restApiClient.postApi(builder.toUriString(), null, requestedData, responseType);
+				obj = restApiClient.postApi(builder.toUriString(), MediaType.APPLICATION_JSON, requestedData, responseType);
 
 			} catch (Exception e) {
 				regProcLogger.error(LoggerFileConstant.SESSIONID.toString(),
